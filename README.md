@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# StudySnap AI
 
-## Getting Started
+Moderne Next.js webapp voor intelligent leren: upload foto/tekst/document/URL of gebruik dictaat, en genereer automatisch quizzen, flashcards en uitleg met AI (Groq).
 
-First, run the development server:
+## Features
+
+- **Inputmethoden**: foto (drag-drop + mobiel camera), tekst (editor + plakken), document (PDF/Word/TXT), URL import, dictaat.
+- **AI outputmodi**: quiz, flashcards, uitleg (multi-select).
+- **3-stappen workflow**: input → configuratie → resultaat/bewerking.
+- **Study modes**: flashcard mode, quiz mode, leesmodus.
+- **Library**: zoeken/filteren, mappenbasis, delen/import/export placeholders.
+- **Integraties**: plek voor **Supabase** en **Groq API key** in `/settings`.
+- **Geen mock data**: generatie loopt via echte Groq API calls.
+
+## Stack
+
+- Next.js (App Router) + TypeScript
+- Tailwind CSS v4
+- Supabase JS client
+- Groq Chat Completions API
+- PDF/Word/TXT parsing (pdf-parse, mammoth)
+
+## Installatie
+
+```bash
+npm install
+npm run dev
+```
+
+Open: `http://localhost:3000`
+
+## API keys instellen
+
+Je kunt op 2 manieren keys instellen:
+
+### 1) Via UI
+Ga naar `/settings` en vul in:
+- Supabase URL
+- Supabase anon key
+- Groq API key
+
+Deze worden lokaal opgeslagen in `localStorage`.
+
+### 2) Via `.env.local` (aanbevolen)
+Maak `/home/runner/work/Studysnap-test/Studysnap-test/.env.local`:
+
+```env
+GROQ_API_KEY=gsk_xxx
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+```
+
+## Supabase tabel
+
+Maak tabel `study_sets` met minimaal:
+- `id` (text/uuid, primary key)
+- `title` (text)
+- `status` (text)
+- `category` (text)
+- `language` (text)
+- `level` (int)
+- `payload` (jsonb)
+- `updated_at` (timestamp)
+
+De app doet `upsert` op `id`.
+
+## Scripts
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run lint
+npm run build
+npm run start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Belangrijke routes
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `/` landing page
+- `/dashboard`
+- `/create`
+- `/study/flashcards`
+- `/study/quiz`
+- `/study/read`
+- `/library`
+- `/settings`
+- API:
+  - `POST /api/generate`
+  - `POST /api/refine`
+  - `POST /api/preview-url`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
