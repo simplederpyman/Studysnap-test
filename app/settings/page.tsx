@@ -1,26 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { getSupabaseSettings, saveSupabaseSettings } from "@/lib/supabase";
-
-const GROQ_KEY_STORAGE = "studysnap_groq_api_key";
+import { groqKeyStore } from "@/lib/runtime-secrets";
 
 export default function SettingsPage() {
-  const [supabaseUrl, setSupabaseUrl] = useState("");
-  const [supabaseAnon, setSupabaseAnon] = useState("");
-  const [groqKey, setGroqKey] = useState("");
+  const [supabaseUrl, setSupabaseUrl] = useState(() => getSupabaseSettings().url);
+  const [supabaseAnon, setSupabaseAnon] = useState(() => getSupabaseSettings().anonKey);
+  const [groqKey, setGroqKey] = useState(() => groqKeyStore.value);
   const [message, setMessage] = useState("");
-
-  useEffect(() => {
-    const s = getSupabaseSettings();
-    setSupabaseUrl(s.url);
-    setSupabaseAnon(s.anonKey);
-    setGroqKey(window.localStorage.getItem(GROQ_KEY_STORAGE) ?? "");
-  }, []);
 
   const save = () => {
     saveSupabaseSettings(supabaseUrl, supabaseAnon);
-    window.localStorage.setItem(GROQ_KEY_STORAGE, groqKey.trim());
+    groqKeyStore.value = groqKey.trim();
     setMessage("Instellingen opgeslagen.");
   };
 

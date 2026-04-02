@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { exportToCsv, exportToJson } from "@/lib/export";
+import { groqKeyStore } from "@/lib/runtime-secrets";
 import { readSets, upsertSet } from "@/lib/storage";
 import { syncSetToSupabase } from "@/lib/supabase";
 import type { GenerateConfig, StudySet } from "@/lib/types";
@@ -155,7 +156,7 @@ export default function CreatePage() {
       if (tab === "photo" && photo) form.append("file", photo);
       if (tab === "document" && doc) form.append("file", doc);
 
-      const k = window.localStorage.getItem("studysnap_groq_api_key") ?? "";
+      const k = groqKeyStore.value;
       const res = await fetch("/api/generate", {
         method: "POST",
         headers: k ? { "x-groq-api-key": k } : undefined,
@@ -181,7 +182,7 @@ export default function CreatePage() {
 
   const refine = async (text: string, instruction: string, apply: (t: string) => void) => {
     try {
-      const k = window.localStorage.getItem("studysnap_groq_api_key") ?? "";
+      const k = groqKeyStore.value;
       const res = await fetch("/api/refine", {
         method: "POST",
         headers: { "Content-Type": "application/json", ...(k ? { "x-groq-api-key": k } : {}) },

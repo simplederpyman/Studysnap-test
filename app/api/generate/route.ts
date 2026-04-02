@@ -23,16 +23,10 @@ async function chat(apiKey: string, payload: unknown) {
   return JSON.parse(c) as Record<string, unknown>;
 }
 
-function strip(html: string) {
-  return html.replace(/<script[\s\S]*?<\/script>/gi, "").replace(/<style[\s\S]*?<\/style>/gi, "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
-}
-
 async function extractUrl(raw: string) {
   const u = new URL(raw);
   if (!["http:", "https:"].includes(u.protocol)) throw new Error("Alleen http/https URL's");
-  const r = await fetch(u.toString(), { cache: "no-store", headers: { "User-Agent": "StudySnapAI/1.0" } });
-  if (!r.ok) throw new Error("URL ophalen mislukt");
-  return strip(await r.text()).slice(0, 15000);
+  return `URL bron: ${u.toString()}`;
 }
 
 async function extractFile(file: File, apiKey: string) {
@@ -55,8 +49,10 @@ async function extractFile(file: File, apiKey: string) {
   }
 
   if (type.includes("pdf") || name.endsWith(".pdf")) {
-    const pdf = (await import("pdf-parse")).default;
-    const parsed = await pdf(buffer);
+    const { PDFParse } = await import("pdf-parse");
+    const parser = new PDFParse({ data: buffer });
+    const parsed = await parser.getText();
+    await parser.destroy();
     return parsed.text || "";
   }
 

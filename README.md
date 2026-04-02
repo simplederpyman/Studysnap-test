@@ -42,7 +42,7 @@ Ga naar `/settings` en vul in:
 Deze worden lokaal opgeslagen in `localStorage`.
 
 ### 2) Via `.env.local` (aanbevolen)
-Maak `/home/runner/work/Studysnap-test/Studysnap-test/.env.local`:
+Maak `.env.local` in de project root:
 
 ```env
 GROQ_API_KEY=gsk_xxx
@@ -87,4 +87,3 @@ npm run start
   - `POST /api/generate`
   - `POST /api/refine`
   - `POST /api/preview-url`
-

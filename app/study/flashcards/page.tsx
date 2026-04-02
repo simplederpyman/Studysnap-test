@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { readSets, saveSets } from "@/lib/storage";
 
 export default function FlashcardModePage() {
@@ -15,18 +15,7 @@ export default function FlashcardModePage() {
 
   const progress = useMemo(() => cards.length ? Math.round(((cardIndex + 1) / cards.length) * 100) : 0, [cardIndex, cards.length]);
 
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (!card) return;
-      if (e.code === "Space") { e.preventDefault(); setFlip((v) => !v); }
-      if (e.key === "ArrowLeft") grade("unknown");
-      if (e.key === "ArrowRight") grade("known");
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [card]);
-
-  const grade = (state: "known" | "unknown") => {
+  const grade = useCallback((state: "known" | "unknown") => {
     if (!set || !card) return;
     const next = [...sets];
     const delta = state === "known" ? 4 : -3;
@@ -38,7 +27,18 @@ export default function FlashcardModePage() {
     saveSets(next);
     setFlip(false);
     setCardIndex((i) => (i + 1 >= cards.length ? 0 : i + 1));
-  };
+  }, [card, cards.length, set, setIndex, sets]);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (!card) return;
+      if (e.code === "Space") { e.preventDefault(); setFlip((v) => !v); }
+      if (e.key === "ArrowLeft") grade("unknown");
+      if (e.key === "ArrowRight") grade("known");
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [card, grade]);
 
   return (
     <div className="stack">

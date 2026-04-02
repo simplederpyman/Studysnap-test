@@ -13,7 +13,7 @@ export default function QuizModePage() {
   const [timed, setTimed] = useState(false);
 
   const set = sets[setIndex];
-  const quiz = set?.quiz ?? [];
+  const quiz = useMemo(() => set?.quiz ?? [], [set]);
   const question = quiz[questionIndex];
 
   const review = useMemo(() => quiz.map((q) => {
