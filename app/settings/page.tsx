@@ -14,38 +14,92 @@ export default function SettingsPage() {
     saveSupabaseSettings(supabaseUrl, supabaseAnon);
     groqKeyStore.value = groqKey.trim();
     setMessage("Instellingen opgeslagen.");
+    setTimeout(() => setMessage(""), 3000);
   };
 
   return (
     <div className="stack">
-      <section className="card">
-        <h1>Integraties & API keys</h1>
-        <p className="small muted">Plek om je Supabase en Groq API key in te voeren.</p>
-      </section>
+      <div>
+        <h1 style={{ fontSize: "1.8rem", fontWeight: 800 }}>⚙️ Instellingen</h1>
+        <p className="muted small">Beheer je API keys en integraties.</p>
+      </div>
 
-      <section className="card stack">
-        <div>
-          <label className="label">Supabase URL</label>
-          <input className="input" value={supabaseUrl} onChange={(e) => setSupabaseUrl(e.target.value)} placeholder="https://xxx.supabase.co" />
-        </div>
-        <div>
-          <label className="label">Supabase anon key</label>
-          <input className="input" value={supabaseAnon} onChange={(e) => setSupabaseAnon(e.target.value)} placeholder="eyJ..." />
-        </div>
-        <div>
-          <label className="label">Groq API key</label>
-          <input className="input" value={groqKey} onChange={(e) => setGroqKey(e.target.value)} placeholder="gsk_..." />
-        </div>
-        <button className="btn btn-primary" onClick={save}>Opslaan</button>
-        {message ? <p className="small" style={{ color: "#6ee7b7" }}>{message}</p> : null}
-      </section>
+      <div className="grid-2">
+        {/* API Keys */}
+        <section className="card stack">
+          <h2 style={{ fontWeight: 700, marginBottom: ".25rem" }}>🔑 API Keys</h2>
+          <p className="small muted">Voer je API keys in om de AI-functionaliteit te activeren.</p>
+          <hr className="divider" />
+          <div>
+            <label className="label">Groq API Key</label>
+            <input
+              className="input"
+              type="password"
+              value={groqKey}
+              onChange={(e) => setGroqKey(e.target.value)}
+              placeholder="gsk_..."
+            />
+            <p className="small muted" style={{ marginTop: ".4rem" }}>
+              Haal je gratis key op via{" "}
+              <a href="https://console.groq.com" target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent)" }}>
+                console.groq.com
+              </a>
+            </p>
+          </div>
+          <div>
+            <label className="label">Supabase URL</label>
+            <input
+              className="input"
+              value={supabaseUrl}
+              onChange={(e) => setSupabaseUrl(e.target.value)}
+              placeholder="https://xxx.supabase.co"
+            />
+          </div>
+          <div>
+            <label className="label">Supabase Anon Key</label>
+            <input
+              className="input"
+              type="password"
+              value={supabaseAnon}
+              onChange={(e) => setSupabaseAnon(e.target.value)}
+              placeholder="eyJ..."
+            />
+          </div>
+          <div className="flex items-center gap-3">
+            <button className="btn btn-primary" onClick={save}>💾 Opslaan</button>
+            {message && (
+              <span className="small" style={{ color: "#6ee7b7" }}>✓ {message}</span>
+            )}
+          </div>
+        </section>
 
-      <section className="card small">
-        <b>Aanbevolen .env.local</b>
-        <pre>{`GROQ_API_KEY=gsk_xxx
-NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key`}</pre>
-      </section>
+        {/* Env guide */}
+        <section className="card">
+          <h2 style={{ fontWeight: 700, marginBottom: ".25rem" }}>📄 .env.local</h2>
+          <p className="small muted" style={{ marginBottom: "1rem" }}>
+            Voor productie-gebruik kun je ook environment variables gebruiken.
+          </p>
+          <div
+            style={{
+              background: "rgba(0,0,0,0.4)",
+              border: "1px solid var(--glass-border)",
+              borderRadius: ".75rem",
+              padding: "1rem",
+              fontFamily: "ui-monospace, monospace",
+              fontSize: ".82rem",
+              color: "#a5f3fc",
+              lineHeight: 1.8,
+            }}
+          >
+            <div style={{ color: "#6ee7b7" }}># Groq</div>
+            <div>GROQ_API_KEY=gsk_xxx</div>
+            <br />
+            <div style={{ color: "#6ee7b7" }}># Supabase</div>
+            <div>NEXT_PUBLIC_SUPABASE_URL=https://...</div>
+            <div>NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...</div>
+          </div>
+        </section>
+      </div>
     </div>
   );
 }
