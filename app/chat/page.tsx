@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { groqKeyStore } from "@/lib/runtime-secrets";
+import { openRouterKeyStore } from "@/lib/runtime-secrets";
 
 interface Message {
   id: string;
@@ -60,23 +60,25 @@ export default function ChatPage() {
     if (textareaRef.current) textareaRef.current.style.height = "auto";
 
     try {
-      const apiKey = groqKeyStore.value;
+      const apiKey = openRouterKeyStore.value;
       if (!apiKey) {
-        throw new Error("Geen Groq API key ingesteld. Ga naar Settings om je key in te voeren.");
+        throw new Error("Geen OpenRouter API key ingesteld. Ga naar Settings om je key in te voeren.");
       }
 
       const history = [...messages, userMsg]
         .filter((m) => m.id !== "welcome")
         .map((m) => ({ role: m.role, content: m.content }));
 
-      const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${apiKey}`,
+          Referer: "https://studysnap.local",
+          "X-Title": "StudySnap AI",
         },
         body: JSON.stringify({
-          model: "llama-3.3-70b-versatile",
+          model: "qwen/qwen3.6-plus:free",
           messages: [
             {
               role: "system",

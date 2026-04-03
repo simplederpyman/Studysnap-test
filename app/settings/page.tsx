@@ -2,19 +2,19 @@
 
 import { useState } from "react";
 import { getSupabaseSettings, saveSupabaseSettings } from "@/lib/supabase";
-import { groqKeyStore } from "@/lib/runtime-secrets";
+import { openRouterKeyStore } from "@/lib/runtime-secrets";
 
 export default function SettingsPage() {
   const [supabaseUrl, setSupabaseUrl] = useState(() => getSupabaseSettings().url);
   const [supabaseAnon, setSupabaseAnon] = useState(() => getSupabaseSettings().anonKey);
-  const [groqKey, setGroqKey] = useState(() => groqKeyStore.value);
+  const [openRouterKey, setOpenRouterKey] = useState(() => openRouterKeyStore.value);
   const [message, setMessage] = useState("");
 
   const MESSAGE_DISPLAY_DURATION = 3000;
 
   const save = () => {
     saveSupabaseSettings(supabaseUrl, supabaseAnon);
-    groqKeyStore.value = groqKey.trim();
+    openRouterKeyStore.value = openRouterKey.trim();
     setMessage("Instellingen opgeslagen.");
     setTimeout(() => setMessage(""), MESSAGE_DISPLAY_DURATION);
   };
@@ -33,18 +33,18 @@ export default function SettingsPage() {
           <p className="small muted">Voer je API keys in om de AI-functionaliteit te activeren.</p>
           <hr className="divider" />
           <div>
-            <label className="label">Groq API Key</label>
+            <label className="label">OpenRouter API Key</label>
             <input
               className="input"
               type="password"
-              value={groqKey}
-              onChange={(e) => setGroqKey(e.target.value)}
-              placeholder="gsk_..."
+              value={openRouterKey}
+              onChange={(e) => setOpenRouterKey(e.target.value)}
+              placeholder="sk-or-v1-..."
             />
             <p className="small muted" style={{ marginTop: ".4rem" }}>
               Haal je gratis key op via{" "}
-              <a href="https://console.groq.com" target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent)" }}>
-                console.groq.com
+              <a href="https://openrouter.ai/keys" target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent)" }}>
+                openrouter.ai/keys
               </a>
             </p>
           </div>
@@ -93,8 +93,8 @@ export default function SettingsPage() {
               lineHeight: 1.8,
             }}
           >
-            <div style={{ color: "#6ee7b7" }}># Groq</div>
-            <div>GROQ_API_KEY=gsk_xxx</div>
+            <div style={{ color: "#6ee7b7" }}># OpenRouter</div>
+            <div>OPENROUTER_API_KEY=sk-or-v1-xxx</div>
             <br />
             <div style={{ color: "#6ee7b7" }}># Supabase</div>
             <div>NEXT_PUBLIC_SUPABASE_URL=https://...</div>
