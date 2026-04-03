@@ -2,17 +2,17 @@
 
 import { useState } from "react";
 import { getSupabaseSettings, saveSupabaseSettings } from "@/lib/supabase";
-import { groqKeyStore } from "@/lib/runtime-secrets";
+import { openRouterKeyStore } from "@/lib/runtime-secrets";
 
 export default function SettingsPage() {
   const [supabaseUrl, setSupabaseUrl] = useState(() => getSupabaseSettings().url);
   const [supabaseAnon, setSupabaseAnon] = useState(() => getSupabaseSettings().anonKey);
-  const [groqKey, setGroqKey] = useState(() => groqKeyStore.value);
+  const [openRouterKey, setOpenRouterKey] = useState(() => openRouterKeyStore.value);
   const [message, setMessage] = useState("");
 
   const save = () => {
     saveSupabaseSettings(supabaseUrl, supabaseAnon);
-    groqKeyStore.value = groqKey.trim();
+    openRouterKeyStore.value = openRouterKey.trim();
     setMessage("Instellingen opgeslagen.");
   };
 
@@ -20,7 +20,7 @@ export default function SettingsPage() {
     <div className="stack">
       <section className="card">
         <h1>Integraties & API keys</h1>
-        <p className="small muted">Plek om je Supabase en Groq API key in te voeren.</p>
+        <p className="small muted">Plek om je Supabase en OpenRouter API key in te voeren.</p>
       </section>
 
       <section className="card stack">
@@ -33,8 +33,8 @@ export default function SettingsPage() {
           <input className="input" value={supabaseAnon} onChange={(e) => setSupabaseAnon(e.target.value)} placeholder="eyJ..." />
         </div>
         <div>
-          <label className="label">Groq API key</label>
-          <input className="input" value={groqKey} onChange={(e) => setGroqKey(e.target.value)} placeholder="gsk_..." />
+          <label className="label">OpenRouter API key</label>
+          <input className="input" value={openRouterKey} onChange={(e) => setOpenRouterKey(e.target.value)} placeholder="sk-or-v1-..." />
         </div>
         <button className="btn btn-primary" onClick={save}>Opslaan</button>
         {message ? <p className="small" style={{ color: "#6ee7b7" }}>{message}</p> : null}
@@ -42,7 +42,7 @@ export default function SettingsPage() {
 
       <section className="card small">
         <b>Aanbevolen .env.local</b>
-        <pre>{`GROQ_API_KEY=gsk_xxx
+        <pre>{`OPENROUTER_API_KEY=sk-or-v1-xxx
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key`}</pre>
       </section>

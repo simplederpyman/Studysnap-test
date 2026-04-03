@@ -3,20 +3,25 @@ import type { GenerateConfig } from "@/lib/types";
 
 export const runtime = "nodejs";
 
-const MODEL = "llama-3.3-70b-versatile";
-const VISION_MODEL = "llama-3.2-11b-vision-preview";
+const MODEL = "qwen/qwen3.6-plus:free";
+const VISION_MODEL = "qwen/qwen3.6-plus:free";
 
 function key(req: Request) {
-  return process.env.GROQ_API_KEY || req.headers.get("x-groq-api-key")?.trim() || "";
+  return process.env.OPENROUTER_API_KEY || req.headers.get("x-openrouter-api-key")?.trim() || "";
 }
 
 async function chat(apiKey: string, payload: unknown) {
-  const r = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+  const r = await fetch("https://openrouter.ai/api/v1/chat/completions", {
     method: "POST",
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${apiKey}`,
+      "HTTP-Referer": "https://studysnap.local",
+      "X-Title": "StudySnap AI",
+    },
     body: JSON.stringify(payload),
   });
-  if (!r.ok) throw new Error(`Groq ${r.status}: ${await r.text()}`);
+  if (!r.ok) throw new Error(`OpenRouter ${r.status}: ${await r.text()}`);
   const j = (await r.json()) as { choices?: Array<{ message?: { content?: string } }> };
   const c = j.choices?.[0]?.message?.content;
   if (!c) throw new Error("Lege model response");
@@ -98,7 +103,7 @@ ${source.slice(0, 24000)}
 export async function POST(req: Request) {
   try {
     const apiKey = key(req);
-    if (!apiKey) return NextResponse.json({ error: "GROQ_API_KEY ontbreekt" }, { status: 400 });
+    if (!apiKey) return NextResponse.json({ error: "OPENROUTER_API_KEY ontbreekt" }, { status: 400 });
 
     const form = await req.formData();
     const configRaw = form.get("config");
