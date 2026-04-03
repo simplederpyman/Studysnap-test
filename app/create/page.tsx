@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from "react";
 import { exportToCsv, exportToJson } from "@/lib/export";
-import { openRouterKeyStore } from "@/lib/runtime-secrets";
 import { readSets, upsertSet } from "@/lib/storage";
 import { syncSetToSupabase } from "@/lib/supabase";
 import type { GenerateConfig, StudySet } from "@/lib/types";
@@ -156,10 +155,8 @@ export default function CreatePage() {
       if (tab === "photo" && photo) form.append("file", photo);
       if (tab === "document" && doc) form.append("file", doc);
 
-      const k = openRouterKeyStore.value;
       const res = await fetch("/api/generate", {
         method: "POST",
-        headers: k ? { "x-openrouter-api-key": k } : undefined,
         body: form,
       });
       const json = (await res.json()) as Record<string, unknown> & { error?: string };
@@ -182,10 +179,9 @@ export default function CreatePage() {
 
   const refine = async (text: string, instruction: string, apply: (t: string) => void) => {
     try {
-      const k = openRouterKeyStore.value;
       const res = await fetch("/api/refine", {
         method: "POST",
-        headers: { "Content-Type": "application/json", ...(k ? { "x-openrouter-api-key": k } : {}) },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text, instruction }),
       });
       const json = (await res.json()) as { result?: string; error?: string };

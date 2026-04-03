@@ -6,8 +6,8 @@ export const runtime = "nodejs";
 const MODEL = "qwen/qwen3.6-plus:free";
 const VISION_MODEL = "qwen/qwen3.6-plus:free";
 
-function key(req: Request) {
-  return process.env.OPENROUTER_API_KEY || req.headers.get("x-openrouter-api-key")?.trim() || "";
+function key() {
+  return process.env.OPENROUTER_API_KEY ?? "";
 }
 
 async function chat(apiKey: string, payload: unknown) {
@@ -102,7 +102,7 @@ ${source.slice(0, 24000)}
 
 export async function POST(req: Request) {
   try {
-    const apiKey = key(req);
+    const apiKey = key();
     if (!apiKey) return NextResponse.json({ error: "OPENROUTER_API_KEY ontbreekt" }, { status: 400 });
 
     const form = await req.formData();

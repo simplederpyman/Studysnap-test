@@ -2,13 +2,13 @@ import { NextResponse } from "next/server";
 
 const MODEL = "qwen/qwen3.6-plus:free";
 
-function key(req: Request) {
-  return process.env.OPENROUTER_API_KEY || req.headers.get("x-openrouter-api-key")?.trim() || "";
+function key() {
+  return process.env.OPENROUTER_API_KEY ?? "";
 }
 
 export async function POST(req: Request) {
   try {
-    const k = key(req);
+    const k = key();
     if (!k) return NextResponse.json({ error: "OPENROUTER_API_KEY ontbreekt" }, { status: 400 });
 
     const body = (await req.json()) as { text?: string; instruction?: string };

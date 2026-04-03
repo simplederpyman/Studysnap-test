@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { openRouterKeyStore } from "@/lib/runtime-secrets";
 
 interface Message {
   id: string;
@@ -60,25 +59,14 @@ export default function ChatPage() {
     if (textareaRef.current) textareaRef.current.style.height = "auto";
 
     try {
-      const apiKey = openRouterKeyStore.value;
-      if (!apiKey) {
-        throw new Error("Geen OpenRouter API key ingesteld. Ga naar Settings om je key in te voeren.");
-      }
-
       const history = [...messages, userMsg]
         .filter((m) => m.id !== "welcome")
         .map((m) => ({ role: m.role, content: m.content }));
 
-      const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      const res = await fetch("/api/chat", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${apiKey}`,
-          Referer: "https://studysnap.local",
-          "X-Title": "StudySnap AI",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model: "qwen/qwen3.6-plus:free",
           messages: [
             {
               role: "system",
@@ -87,18 +75,16 @@ export default function ChatPage() {
             },
             ...history,
           ],
-          temperature: 0.7,
-          max_tokens: 1024,
         }),
       });
 
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data?.error?.message ?? `API fout: ${res.status}`);
+        const data = (await res.json().catch(() => ({}))) as { error?: string };
+        throw new Error(data?.error ?? `API fout: ${res.status}`);
       }
 
-      const data = await res.json();
-      const reply = data.choices?.[0]?.message?.content ?? "Geen antwoord ontvangen.";
+      const data = (await res.json()) as { reply?: string; error?: string };
+      const reply = data.reply ?? "Geen antwoord ontvangen.";
 
       setMessages((prev) => [
         ...prev,

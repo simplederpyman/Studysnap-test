@@ -15,11 +15,6 @@ const steps = [
   { n: "3", title: "Studeer", desc: "Bewerk, exporteer en oefen met study modes" },
 ];
 
-const testimonials = [
-  { quote: "Ik maak in minuten complete oefensets uit mijn college-notities.", author: "Student, TU Delft" },
-  { quote: "Docenten besparen uren voorbereiding met automatische quizgeneratie.", author: "Docent, Hogeschool" },
-  { quote: "De combinatie van flashcards + AI-chat werkt top voor tentamens.", author: "Student, UvA" },
-];
 
 export default function Home() {
   return (
@@ -95,18 +90,6 @@ export default function Home() {
       </section>
 
       {/* Testimonials */}
-      <section>
-        <h2 style={{ marginBottom: "1.25rem", fontSize: "1.5rem", fontWeight: 700 }}>Wat gebruikers zeggen</h2>
-        <div className="grid-3">
-          {testimonials.map(({ quote, author }) => (
-            <div key={author} className="card">
-              <div style={{ fontSize: "1.8rem", marginBottom: ".5rem", opacity: 0.6 }}>&ldquo;</div>
-              <p className="small" style={{ lineHeight: 1.7 }}>{quote}</p>
-              <p className="small muted" style={{ marginTop: ".75rem", fontWeight: 600 }}>— {author}</p>
-            </div>
-          ))}
-        </div>
-      </section>
 
       {/* CTA */}
       <section className="card text-center" style={{ padding: "3rem 2rem" }}>
@@ -119,9 +102,6 @@ export default function Home() {
         <div className="hero-actions">
           <Link href="/create" className="btn btn-primary" style={{ padding: ".7rem 1.8rem", fontSize: "1rem" }}>
             ✨ Maak je eerste set
-          </Link>
-          <Link href="/settings" className="btn" style={{ padding: ".7rem 1.4rem", fontSize: "1rem" }}>
-            ⚙️ API keys instellen
           </Link>
         </div>
       </section>

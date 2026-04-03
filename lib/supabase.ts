@@ -3,25 +3,9 @@
 import { createClient } from "@supabase/supabase-js";
 import type { StudySet } from "./types";
 
-const URL_KEY = "studysnap_supabase_url";
-const ANON_KEY = "studysnap_supabase_anon_key";
-
-export function getSupabaseSettings() {
-  if (typeof window === "undefined") return { url: "", anonKey: "" };
-  return {
-    url: window.localStorage.getItem(URL_KEY) ?? "",
-    anonKey: window.localStorage.getItem(ANON_KEY) ?? "",
-  };
-}
-
-export function saveSupabaseSettings(url: string, anonKey: string) {
-  if (typeof window === "undefined") return;
-  window.localStorage.setItem(URL_KEY, url.trim());
-  window.localStorage.setItem(ANON_KEY, anonKey.trim());
-}
-
 function client() {
-  const { url, anonKey } = getSupabaseSettings();
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
   if (!url || !anonKey) return null;
   try {
     return createClient(url, anonKey);

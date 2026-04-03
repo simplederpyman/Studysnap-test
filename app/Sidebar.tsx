@@ -14,9 +14,7 @@ const nav = [
   { href: "/study/quiz", icon: "🧠", label: "Quiz" },
 ] as const;
 
-const bottom = [
-  { href: "/settings", icon: "⚙️", label: "Settings" },
-] as const;
+const bottom: { href: string; icon: string; label: string }[] = [];
 
 export default function Sidebar() {
   const pathname = usePathname();
