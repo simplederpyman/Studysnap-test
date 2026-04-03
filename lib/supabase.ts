@@ -7,10 +7,12 @@ const URL_KEY = "studysnap_supabase_url";
 const ANON_KEY = "studysnap_supabase_anon_key";
 
 export function getSupabaseSettings() {
-  if (typeof window === "undefined") return { url: "", anonKey: "" };
+  const envUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
+  const envAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
+  if (typeof window === "undefined") return { url: envUrl, anonKey: envAnonKey };
   return {
-    url: window.localStorage.getItem(URL_KEY) ?? "",
-    anonKey: window.localStorage.getItem(ANON_KEY) ?? "",
+    url: window.localStorage.getItem(URL_KEY) || envUrl,
+    anonKey: window.localStorage.getItem(ANON_KEY) || envAnonKey,
   };
 }
 
