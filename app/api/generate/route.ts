@@ -16,7 +16,7 @@ async function chat(apiKey: string, payload: unknown) {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${apiKey}`,
-      "HTTP-Referer": "https://studysnap.local",
+      Referer: "https://studysnap.local",
       "X-Title": "StudySnap AI",
     },
     body: JSON.stringify(payload),

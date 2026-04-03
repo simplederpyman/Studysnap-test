@@ -19,7 +19,7 @@ export async function POST(req: Request) {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${k}`,
-        "HTTP-Referer": "https://studysnap.local",
+        Referer: "https://studysnap.local",
         "X-Title": "StudySnap AI",
       },
       body: JSON.stringify({
