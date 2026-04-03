@@ -10,11 +10,13 @@ export default function SettingsPage() {
   const [groqKey, setGroqKey] = useState(() => groqKeyStore.value);
   const [message, setMessage] = useState("");
 
+  const MESSAGE_DISPLAY_DURATION = 3000;
+
   const save = () => {
     saveSupabaseSettings(supabaseUrl, supabaseAnon);
     groqKeyStore.value = groqKey.trim();
     setMessage("Instellingen opgeslagen.");
-    setTimeout(() => setMessage(""), 3000);
+    setTimeout(() => setMessage(""), MESSAGE_DISPLAY_DURATION);
   };
 
   return (

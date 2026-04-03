@@ -129,7 +129,7 @@ export default function ChatPage() {
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "calc(100vh - 4rem)", maxHeight: "900px" }}>
+    <div className="chat-layout">
       {/* Header */}
       <div className="flex items-center justify-between" style={{ marginBottom: "1rem" }}>
         <div className="flex items-center gap-3">
