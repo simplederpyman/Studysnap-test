@@ -17,7 +17,7 @@ Moderne Next.js webapp voor intelligent leren: upload foto/tekst/document/URL of
 - Next.js (App Router) + TypeScript
 - Tailwind CSS v4
 - Supabase JS client
-- OpenRouter Chat Completions API
+- OpenRouter Chat Completions API (model: qwen/qwen3.6-plus:free)
 - PDF/Word/TXT parsing (pdf-parse, mammoth)
 
 ## Installatie
@@ -37,7 +37,7 @@ Je kunt op 2 manieren keys instellen:
 Ga naar `/settings` en vul in:
 - Supabase URL
 - Supabase anon key
-- OpenRouter API key
+- OpenRouter API key (haal op via [openrouter.ai/keys](https://openrouter.ai/keys))
 
 Deze worden lokaal opgeslagen in `localStorage`.
 
@@ -77,6 +77,7 @@ npm run start
 
 - `/` landing page
 - `/dashboard`
+- `/chat` AI chat assistent
 - `/create`
 - `/study/flashcards`
 - `/study/quiz`

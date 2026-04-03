@@ -80,9 +80,7 @@ export default function QuizModePage() {
         ))}
         {wrongOnly.length > 0 ? (
           <button className="btn" style={{ marginTop: 8 }} onClick={() => {
-            const next = [...sets];
-            next[setIndex].quiz = wrongOnly;
-            setSets(next);
+            setSets(sets.map((s, i) => i === setIndex ? { ...s, quiz: wrongOnly } : s));
             setQuestionIndex(0);
             setAnswers({});
           }}>Oefen alleen fouten</button>
