@@ -42,39 +42,104 @@ export default function FlashcardModePage() {
 
   return (
     <div className="stack">
-      <section className="card">
-        <h1>Flashcard Mode</h1>
-        <p className="small muted">Swipe/keyboard: links = onbekend, rechts = bekend, spatie = flip.</p>
-      </section>
+      <div>
+        <h1 style={{ fontSize: "1.8rem", fontWeight: 800 }}>🃏 Flashcard Mode</h1>
+        <p className="small muted">Spatie = flip · ← onbekend · → bekend</p>
+      </div>
 
-      <section className="card">
-        <label className="label">Set</label>
-        <select className="input" value={setIndex} onChange={(e) => { setSetIndex(Number(e.target.value)); setCardIndex(0); setFlip(false); }}>
+      <div className="card">
+        <label className="label">Selecteer set</label>
+        <select
+          className="input"
+          value={setIndex}
+          onChange={(e) => { setSetIndex(Number(e.target.value)); setCardIndex(0); setFlip(false); }}
+        >
           {sets.map((s, i) => <option key={s.id} value={i}>{s.title}</option>)}
         </select>
-      </section>
+      </div>
 
-      {!card ? <section className="card small muted">Geen flashcards beschikbaar.</section> : (
-        <section className="card">
-          <div style={{ height: 8, background: "#1e293b", borderRadius: 999, overflow: "hidden" }}>
-            <div style={{ height: "100%", width: `${progress}%`, background: "#0ea5e9" }} />
+      {!card ? (
+        <div className="card" style={{ textAlign: "center", padding: "3rem" }}>
+          <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>📭</div>
+          <p className="muted">Geen flashcards beschikbaar voor deze set.</p>
+        </div>
+      ) : (
+        <>
+          {/* Progress */}
+          <div className="card card-sm">
+            <div className="flex items-center justify-between" style={{ marginBottom: ".5rem" }}>
+              <span className="small muted">Voortgang: {cardIndex + 1}/{cards.length}</span>
+              <span className="small muted">{progress}%</span>
+            </div>
+            <div className="progress-track">
+              <div className="progress-fill" style={{ width: `${progress}%` }} />
+            </div>
           </div>
-          <p className="small muted">Voortgang: {cardIndex + 1}/{cards.length}</p>
-          <button className="btn" style={{ width: "100%", minHeight: 220, textAlign: "left", marginTop: 10 }} onClick={() => setFlip((v) => !v)}>
-            {flip ? card.back : card.front}
+
+          {/* Card */}
+          <button
+            className="card"
+            style={{
+              width: "100%",
+              minHeight: 260,
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              textAlign: "center",
+              fontSize: "1.15rem",
+              lineHeight: 1.6,
+              background: flip
+                ? "rgba(99,102,241,0.1)"
+                : "var(--glass-bg)",
+              borderColor: flip
+                ? "rgba(99,102,241,0.3)"
+                : "var(--glass-border)",
+              transition: "all .3s ease",
+              border: "none",
+              color: "var(--text)",
+              padding: "2rem",
+            }}
+            onClick={() => setFlip((v) => !v)}
+          >
+            <div>
+              <div className="small muted" style={{ marginBottom: ".75rem" }}>
+                {flip ? "↩ Achterkant" : "Voorkant →"}
+              </div>
+              <div>{flip ? card.back : card.front}</div>
+            </div>
           </button>
-          <div className="row gap-sm" style={{ marginTop: 10, flexWrap: "wrap" }}>
-            <button className="btn" onClick={() => grade("unknown")}>← Onbekend</button>
-            <button className="btn btn-primary" onClick={() => grade("known")}>Bekend →</button>
-            <button className="btn" onClick={() => {
-              if ("speechSynthesis" in window) {
-                const u = new SpeechSynthesisUtterance(flip ? card.back : card.front);
-                u.lang = set?.language === "Nederlands" ? "nl-NL" : "en-US";
-                window.speechSynthesis.speak(u);
-              }
-            }}>Audio uitspraak</button>
+
+          {/* Actions */}
+          <div className="flex gap-3" style={{ flexWrap: "wrap" }}>
+            <button
+              className="btn"
+              style={{ flex: 1, minWidth: 120 }}
+              onClick={() => grade("unknown")}
+            >
+              ← Onbekend
+            </button>
+            <button
+              className="btn btn-primary"
+              style={{ flex: 1, minWidth: 120 }}
+              onClick={() => grade("known")}
+            >
+              Bekend →
+            </button>
+            <button
+              className="btn"
+              onClick={() => {
+                if ("speechSynthesis" in window) {
+                  const u = new SpeechSynthesisUtterance(flip ? card.back : card.front);
+                  u.lang = set?.language === "Nederlands" ? "nl-NL" : "en-US";
+                  window.speechSynthesis.speak(u);
+                }
+              }}
+            >
+              🔊
+            </button>
           </div>
-        </section>
+        </>
       )}
     </div>
   );
