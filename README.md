@@ -1,6 +1,6 @@
 # StudySnap AI
 
-Moderne Next.js webapp voor intelligent leren: upload foto/tekst/document/URL of gebruik dictaat, en genereer automatisch quizzen, flashcards en uitleg met AI (Groq).
+Moderne Next.js webapp voor intelligent leren: upload foto/tekst/document/URL of gebruik dictaat, en genereer automatisch quizzen, flashcards en uitleg met AI (OpenRouter).
 
 ## Features
 
@@ -9,15 +9,15 @@ Moderne Next.js webapp voor intelligent leren: upload foto/tekst/document/URL of
 - **3-stappen workflow**: input → configuratie → resultaat/bewerking.
 - **Study modes**: flashcard mode, quiz mode, leesmodus.
 - **Library**: zoeken/filteren, mappenbasis, delen/import/export placeholders.
-- **Integraties**: plek voor **Supabase** en **Groq API key** in `/settings`.
-- **Geen mock data**: generatie loopt via echte Groq API calls.
+- **Integraties**: plek voor **Supabase** en **OpenRouter API key** in `/settings`.
+- **Geen mock data**: generatie loopt via echte OpenRouter API calls.
 
 ## Stack
 
 - Next.js (App Router) + TypeScript
 - Tailwind CSS v4
 - Supabase JS client
-- Groq Chat Completions API
+- OpenRouter Chat Completions API
 - PDF/Word/TXT parsing (pdf-parse, mammoth)
 
 ## Installatie
@@ -37,7 +37,7 @@ Je kunt op 2 manieren keys instellen:
 Ga naar `/settings` en vul in:
 - Supabase URL
 - Supabase anon key
-- Groq API key
+- OpenRouter API key
 
 Deze worden lokaal opgeslagen in `localStorage`.
 
@@ -45,7 +45,7 @@ Deze worden lokaal opgeslagen in `localStorage`.
 Maak `.env.local` in de project root:
 
 ```env
-GROQ_API_KEY=gsk_xxx
+OPENROUTER_API_KEY=sk-or-v1-xxx
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
 ```

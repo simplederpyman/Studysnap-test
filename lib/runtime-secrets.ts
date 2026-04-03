@@ -1,5 +1,5 @@
 "use client";
 
-export const groqKeyStore = {
+export const openRouterKeyStore = {
   value: "",
 };
